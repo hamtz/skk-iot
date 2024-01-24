@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-    <title>Dashboard - NiceAdmin Bootstrap Template</title>
+    <title>Sistem Keamanan Kandang</title>
     <meta content="" name="description" />
     <meta content="" name="keywords" />
 
@@ -36,6 +36,36 @@
 
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet" />
+    <style>
+      .video-src{
+        vertical-align: middle;
+      /* margin: auto; */
+      /*padding-right: 100px;*/
+      width: 300px;
+      }
+
+       @media (max-width: 768px) {
+        /* Menyembunyikan tombol sidebar pada layar smartphone */
+        .toggle-sidebar-btn {
+          display: none;
+        }
+
+        /* Menyembunyikan sidebar pada layar smartphone */
+        #sidebar {
+          display: none;
+        }
+
+        /* Menampilkan sidebar saat tombol sidebar diklik pada layar smartphone */
+        #sidebar.active {
+          display: block;
+        }
+
+        /* Membuat tombol untuk menampilkan sidebar pada layar smartphone */
+        .toggle-sidebar-btn-mobile {
+          display: block;
+        }
+      }
+    </style>
 
     <!-- =======================================================
   * Template Name: NiceAdmin
@@ -50,9 +80,9 @@
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
       <div class="d-flex align-items-center justify-content-between">
-        <a href="index.html" class="logo d-flex align-items-center">
+        <a href="" class="logo d-flex align-items-center">
           <img src="assets/img/logo.png" alt="" />
-          <span class="d-none d-lg-block">NiceAdmin</span>
+          <span class="d-none d-lg-block">SKK-IoT</span>
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
       </div>
@@ -71,12 +101,18 @@
     <aside id="sidebar" class="sidebar">
       <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="index.html">
+          <a class="nav-link" href="/">
             <i class="bi bi-grid"></i>
             <span>Dashboard</span>
           </a>
         </li>
         <!-- End Dashboard Nav -->
+        <li class="nav-item">
+        <a class="nav-link collapsed" href="/list-deteksi">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>List Terdeteksi</span>
+        </a>
+      </li>
 
         
     </aside>
@@ -87,7 +123,7 @@
         <h1>Dashboard</h1>
         <nav>
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ index }}">Home</a></li>
             <li class="breadcrumb-item active">Dashboard</li>
           </ol>
         </nav>
@@ -106,32 +142,23 @@
                     <a class="icon" href="#" data-bs-toggle="dropdown"
                       ><i class="bi bi-three-dots"></i
                     ></a>
-                    <ul
-                      class="dropdown-menu dropdown-menu-end dropdown-menu-arrow"
-                    >
-                      <li class="dropdown-header text-start">
-                        <h6>Filter</h6>
-                      </li>
-
-                      <li><a class="dropdown-item" href="#">Today</a></li>
-                      <li><a class="dropdown-item" href="#">This Month</a></li>
-                      <li><a class="dropdown-item" href="#">This Year</a></li>
-                    </ul>
+                    
                   </div>
 
                   <div class="card-body">
-                    <h5 class="card-title">Sales <span>| Today</span></h5>
+                    <h5 class="card-title"><div id="date"></div></h5>
 
                     <div class="d-flex align-items-center">
                       <div
                         class="card-icon rounded-circle d-flex align-items-center justify-content-center"
                       >
-                        <i class="bi bi-cart"></i>
+                        <i class="bi bi-clock"></i>
                       </div>
                       <div class="ps-3">
-                        <h6>145</h6>
-                        <span class="text-success small pt-1 fw-bold">12%</span>
-                        <span class="text-muted small pt-2 ps-1">increase</span>
+                     <div class="inner">
+                    <h3><div id="clock"></div></h3>
+                    
+                  </div>
                       </div>
                     </div>
                   </div>
@@ -146,34 +173,25 @@
                     <a class="icon" href="#" data-bs-toggle="dropdown"
                       ><i class="bi bi-three-dots"></i
                     ></a>
-                    <ul
-                      class="dropdown-menu dropdown-menu-end dropdown-menu-arrow"
-                    >
-                      <li class="dropdown-header text-start">
-                        <h6>Filter</h6>
-                      </li>
-
-                      <li><a class="dropdown-item" href="#">Today</a></li>
-                      <li><a class="dropdown-item" href="#">This Month</a></li>
-                      <li><a class="dropdown-item" href="#">This Year</a></li>
-                    </ul>
+                   
                   </div>
 
                   <div class="card-body">
                     <h5 class="card-title">
-                      Revenue <span>| This Month</span>
+                      Total Terdeteksi
                     </h5>
 
                     <div class="d-flex align-items-center">
                       <div
                         class="card-icon rounded-circle d-flex align-items-center justify-content-center"
                       >
-                        <i class="bi bi-currency-dollar"></i>
+                        <i class="bi bi-person-bounding-box"></i>
                       </div>
                       <div class="ps-3">
-                        <h6>$3,264</h6>
-                        <span class="text-success small pt-1 fw-bold">8%</span>
-                        <span class="text-muted small pt-2 ps-1">increase</span>
+                      <h3>
+<div id="image-count">  {{ image_count }}    </div>
+                      </h3> 
+                        
                       </div>
                     </div>
                   </div>
@@ -182,46 +200,37 @@
               <!-- End Revenue Card -->
 
               <!-- Customers Card -->
-              <div class="col-xxl-4 col-xl-12">
-                <div class="card info-card customers-card">
-                  <div class="filter">
-                    <a class="icon" href="#" data-bs-toggle="dropdown"
-                      ><i class="bi bi-three-dots"></i
-                    ></a>
-                    <ul
-                      class="dropdown-menu dropdown-menu-end dropdown-menu-arrow"
-                    >
-                      <li class="dropdown-header text-start">
-                        <h6>Filter</h6>
-                      </li>
-
-                      <li><a class="dropdown-item" href="#">Today</a></li>
-                      <li><a class="dropdown-item" href="#">This Month</a></li>
-                      <li><a class="dropdown-item" href="#">This Year</a></li>
-                    </ul>
-                  </div>
-
+              
+              <!-- End Customers Card -->
+<!-- Sales Card -->
+              <div class="col-xxl-4 col-md-6">
+                <div class="card info-card sales-card">
+                  
                   <div class="card-body">
-                    <h5 class="card-title">
-                      Customers <span>| This Year</span>
-                    </h5>
+                    <h5 class="card-title">LIVE VIEW </h5>
 
                     <div class="d-flex align-items-center">
-                      <div
-                        class="card-icon rounded-circle d-flex align-items-center justify-content-center"
-                      >
-                        <i class="bi bi-people"></i>
+                      <img src="{{ url_for('video_feed') }}" class="video-src">
+                     
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <br>
+                      <br>
+                      <div class="col">
+                        <form method="POST" action="{{ url_for('start_camera') }}">
+                           <input type="submit" class="btn btn-success mr-3" value="Start Camera">
+                       </form>
                       </div>
-                      <div class="ps-3">
-                        <h6>1244</h6>
-                        <span class="text-danger small pt-1 fw-bold">12%</span>
-                        <span class="text-muted small pt-2 ps-1">decrease</span>
-                      </div>
+                      <div class="col">
+                        <form method="POST" action="{{ url_for('stop_camera') }}">
+                            <input type="submit" class="btn btn-danger" value="Stop Camera">
+                        </form>
+                      </div>                    
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- End Customers Card -->
+              <!-- End Sales Card -->
 
               
             </div>
@@ -230,13 +239,14 @@
 
         </div>
       </section>
+
     </main>
     <!-- End #main -->
 
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer">
       <div class="copyright">
-        &copy; Copyright <strong><span>NiceAdmin</span></strong
+        &copy; Copyright <strong><span>Muhammad Edwin</span></strong
         >. All Rights Reserved
       </div>
       <div class="credits">
@@ -244,7 +254,7 @@
         <!-- You can delete the links only if you purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
       </div>
     </footer>
     <!-- End Footer -->
@@ -267,5 +277,33 @@
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
+
+   
+  <script>
+    var clockElement = document.getElementById("clock");
+    var dateElement = document.getElementById("date");
+
+    function updateClock() {
+      var now = new Date();
+      var timeString = now.toString().slice(15, 24);
+      
+      clockElement.textContent = timeString;
+    }
+
+    function updateDate() {
+      var now = new Date();
+      var dateString = now.toLocaleDateString(); // Mendapatkan tanggal, bulan, dan tahun
+      
+      dateElement.textContent = dateString;
+    }
+
+    function updateClockAndDate() {
+      updateClock();
+      updateDate();
+    }
+
+    setInterval(updateClockAndDate, 1000);
+    updateClockAndDate(); // Panggil fungsi sekali agar ditampilkan segera saat halaman dimuat
+  </script>
   </body>
 </html>
