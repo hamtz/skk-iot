@@ -152,10 +152,10 @@
                                 <td>{{ image }}</td>
                                 <td style="text-align: center;">
                                       <a href="{{ url_for('zoom_image', image_name=image) }}" class="btn btn-primary"><i class="bi bi-zoom-in"></i></a>
-                                    <form id="deleteForm" method="POST" action="{{ url_for('delete_image', image=image) }}" style="display: inline;" onsubmit="return confirmDelete()">
-                                      <input type="hidden" name="image_to_delete" value="{{ image }}">
-                                      <button type="submit" class="btn btn-danger"><i class="bi bi-trash3"></i></i></button>
-                                    </form>
+                                   <form id="deleteForm" method="POST" action="{{ url_for('delete_image') }}" style="display: inline;" onsubmit="return confirmDelete('{{ image }}')">
+                                    <input type="hidden" name="image_to_delete" value="">
+                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash3"></i></i></button>
+                                  </form>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -211,16 +211,17 @@
 
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
-  function confirmDelete() {
+  function confirmDelete(imageName) {
     swal({
-      title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this image!",
+      title: "Hapus Gambar?",
+      text: "  ",
       icon: "warning",
       buttons: ["Cancel", "Delete"],
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        // If the user clicks on "Delete", submit the form
+        // If the user clicks on "Delete", submit the form with the image name
+        document.forms["deleteForm"].elements["image_to_delete"].value = imageName;
         document.forms["deleteForm"].submit();
       }
     });
