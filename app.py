@@ -7,7 +7,7 @@ from pyfcm import FCMNotification
 import firebase_admin
 from firebase_admin import credentials, messaging
 
-cred = credentials.Certificate("google-services.json")
+cred = credentials.Certificate("siskam-df66d-firebase-adminsdk-q6lbj-561ad6009d.json")
 firebase_admin.initialize_app(cred)
 tokens = "eGvKDO6wRieOXj_TlOF7ub:APA91bHmyDIcaC_UPXV21rjEFSzoq19OY3aB473ebDh8ORxb6gy5dCFCSCh8qqf8YqzhWxSFA2fsv2t2lIlBoLY2ckVQ-ey0CYDhGc9vkssy7NuRHkeEfdxnTSsT4sS6LSv8_NEcmzPY"
 
