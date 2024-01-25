@@ -22,7 +22,7 @@ wiringpi.pinMode(led_pin, GPIO.OUTPUT)
 push_service = FCMNotification(api_key="AIzaSyBKoixbI0LyS93C1mQ2ZA_Slz3BEXN9Xqw")
 
 # Token perangkat Android
-registration_id = "fcp4YhjjSEmJQjh2nuVwNS:APA91bEOZoquLFRGEfPhs0IWT3YU4xlONepWo-q4EQlvpLlwEQw82t4TmgUj-Upz1gBzDegkb8RKm_7ml9sJV5xsyma3QbXbZyc8nIz3hDbKIk1J32T5et0EBAPFsmRGh19lJkZS6p66"
+registration_id = "eGvKDO6wRieOXj_TlOF7ub:APA91bHmyDIcaC_UPXV21rjEFSzoq19OY3aB473ebDh8ORxb6gy5dCFCSCh8qqf8YqzhWxSFA2fsv2t2lIlBoLY2ckVQ-ey0CYDhGc9vkssy7NuRHkeEfdxnTSsT4sS6LSv8_NEcmzPY"
 
 
 # @app.route('/pushnotif')
