@@ -4,6 +4,10 @@ import time
 from wiringpi import GPIO
 import os  # Tambahkan ini untuk mengimpor modul os
 from pyfcm import FCMNotification
+import firebase_admin
+from firebase_admin import credentials, messaging
+
+tokens = "eGvKDO6wRieOXj_TlOF7ub:APA91bHmyDIcaC_UPXV21rjEFSzoq19OY3aB473ebDh8ORxb6gy5dCFCSCh8qqf8YqzhWxSFA2fsv2t2lIlBoLY2ckVQ-ey0CYDhGc9vkssy7NuRHkeEfdxnTSsT4sS6LSv8_NEcmzPY"
 
 
 # Inisialisasi WiringPi
@@ -17,21 +21,38 @@ led_pin = 6
 wiringpi.pinMode(pir_pin, GPIO.INPUT)
 wiringpi.pinMode(led_pin, GPIO.OUTPUT)
 
-
-# Ganti dengan kunci server Firebase Anda
-push_service = FCMNotification(api_key="AIzaSyBKoixbI0LyS93C1mQ2ZA_Slz3BEXN9Xqw")
-
-# Token perangkat Android
-registration_id = "eGvKDO6wRieOXj_TlOF7ub:APA91bHmyDIcaC_UPXV21rjEFSzoq19OY3aB473ebDh8ORxb6gy5dCFCSCh8qqf8YqzhWxSFA2fsv2t2lIlBoLY2ckVQ-ey0CYDhGc9vkssy7NuRHkeEfdxnTSsT4sS6LSv8_NEcmzPY"
+# # Ganti dengan kunci server Firebase Anda
+# push_service = FCMNotification(api_key="AIzaSyBKoixbI0LyS93C1mQ2ZA_Slz3BEXN9Xqw")
+#
+# # Token perangkat Android
+# registration_id = "eGvKDO6wRieOXj_TlOF7ub:APA91bHmyDIcaC_UPXV21rjEFSzoq19OY3aB473ebDh8ORxb6gy5dCFCSCh8qqf8YqzhWxSFA2fsv2t2lIlBoLY2ckVQ-ey0CYDhGc9vkssy7NuRHkeEfdxnTSsT4sS6LSv8_NEcmzPY"
 
 
 # @app.route('/pushnotif')
-def pushnotif():
-    # Kirim pesan
-    message_title = "Peringatan!"
-    message_body = "Gerakan Terdeteksi"
-    result = push_service.notify_single_device(registration_id=registration_id, message_title=message_title, message_body=message_body)
-    print(result)
+# def pushnotif():
+#     # Kirim pesan
+#     message_title = "Peringatan!"
+#     message_body = "Gerakan Terdeteksi"
+#     result = push_service.notify_single_device(registration_id=registration_id, message_title=message_title, message_body=message_body)
+#     print(result)
+
+cred = credentials.Certificate("google-services.json")
+firebase_admin.initialize_app(cred)
+
+
+def pushNotif(title, msg, registration_token, dataObject=None):
+    message = messaging.MulticastMessage(
+        notification=messaging.Notification(
+            title=title,
+            body=msg
+        ),
+        data=dataObject,
+        tokens=registration_token,
+    )
+
+    response = messaging.send_multicast(message)
+    print("Successfully sent message: ", response)
+
 
 def capture_image():
     # Inisialisasi objek VideoCapture dengan indeks kamera. Biasanya, kamera internal memiliki indeks 0.
@@ -82,7 +103,7 @@ try:
         if (pir_value == 1):
             wiringpi.digitalWrite(led_pin, GPIO.HIGH)
             capture_image()
-            pushnotif()
+            pushNotif("Peringatan", "Gerakan Terdeteksi", tokens)
 
         else:
             wiringpi.digitalWrite(led_pin, GPIO.LOW)
