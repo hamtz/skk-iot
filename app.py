@@ -3,32 +3,15 @@ import wiringpi
 import time
 from wiringpi import GPIO
 import os  # Tambahkan ini untuk mengimpor modul os
-from pyfcm import FCMNotification
 import firebase_admin
-from firebase_admin import credentials, messaging
-
+from firebase_admin import db, credentials, messaging
 import FCMManager as fcm
 
-
-firebaseConfig = {
-  apiKey: "AIzaSyAQSVQguhdTQ-N7gQKE2juIG1jpBmQOQts",
-  authDomain: "siskam-df66d.firebaseapp.com",
-  databaseURL: "https://siskam-df66d-default-rtdb.firebaseio.com",
-  projectId: "siskam-df66d",
-  storageBucket: "siskam-df66d.appspot.com",
-  messagingSenderId: "473723424795",
-  appId: "1:473723424795:web:f026c68141cc6fdf3de8be",
-  measurementId: "G-E25RBCKH3J"
-};
-
-firebase = pyrebase.initialize_app(firebaseConfig)
-storage = firebase.storage()
-db = firebase.database()
-
-# tokens = ["eGvKDO6wRieOXj_TlOF7ub:APA91bHmyDIcaC_UPXV21rjEFSzoq19OY3aB473ebDh8ORxb6gy5dCFCSCh8qqf8YqzhWxSFA2fsv2t2lIlBoLY2ckVQ-ey0CYDhGc9vkssy7NuRHkeEfdxnTSsT4sS6LSv8_NEcmzPY"]
+cred = credentials.Certificate("siskam-df66d-firebase-adminsdk-q6lbj-561ad6009d.json")
+firebase_admin.initialize_app(cred)
 
 # Mendapatkan referensi ke database tokens
-tokens_ref = firebase_admin.db.reference("tokens")
+tokens_ref = db.reference("tokens")
 
 # Mendapatkan semua token dari database
 tokens_snapshot = tokens_ref.get()

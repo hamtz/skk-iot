@@ -1,8 +1,5 @@
-import firebase_admin
 from firebase_admin import credentials, messaging
 
-cred = credentials.Certificate("siskam-df66d-firebase-adminsdk-q6lbj-561ad6009d.json")
-firebase_admin.initialize_app(cred)
 
 def pushNotif(tokens_list):
     message = messaging.MulticastMessage(
