@@ -7,8 +7,24 @@ from pyfcm import FCMNotification
 import firebase_admin
 from firebase_admin import credentials, messaging
 
-cred = credentials.Certificate("siskam-df66d-firebase-adminsdk-q6lbj-561ad6009d.json")
-firebase_admin.initialize_app(cred)
+import FCMManager as fcm
+
+
+firebaseConfig = {
+  apiKey: "AIzaSyAQSVQguhdTQ-N7gQKE2juIG1jpBmQOQts",
+  authDomain: "siskam-df66d.firebaseapp.com",
+  databaseURL: "https://siskam-df66d-default-rtdb.firebaseio.com",
+  projectId: "siskam-df66d",
+  storageBucket: "siskam-df66d.appspot.com",
+  messagingSenderId: "473723424795",
+  appId: "1:473723424795:web:f026c68141cc6fdf3de8be",
+  measurementId: "G-E25RBCKH3J"
+};
+
+firebase = pyrebase.initialize_app(firebaseConfig)
+storage = firebase.storage()
+db = firebase.database()
+
 # tokens = ["eGvKDO6wRieOXj_TlOF7ub:APA91bHmyDIcaC_UPXV21rjEFSzoq19OY3aB473ebDh8ORxb6gy5dCFCSCh8qqf8YqzhWxSFA2fsv2t2lIlBoLY2ckVQ-ey0CYDhGc9vkssy7NuRHkeEfdxnTSsT4sS6LSv8_NEcmzPY"]
 
 # Mendapatkan referensi ke database tokens
@@ -45,18 +61,6 @@ wiringpi.pinMode(led_pin, GPIO.OUTPUT)
 #     result = push_service.notify_single_device(registration_id=registration_id, message_title=message_title, message_body=message_body)
 #     print(result)
 
-
-def pushNotif():
-    message = messaging.MulticastMessage(
-        tokens=tokens_list,
-        notification=messaging.Notification(
-            title="Peringatan!",
-            body="Gerakan Terdeteksi"
-        ),
-    )
-    response = messaging.send_multicast(message)
-    print(f"Successfully sent {response.success_count} messages")
-    print(f"Failed to send {response.failure_count} messages")
 
 
 def capture_image():
@@ -108,7 +112,7 @@ try:
         if (pir_value == 1):
             wiringpi.digitalWrite(led_pin, GPIO.HIGH)
             capture_image()
-            pushNotif()
+            fcm.pushNotif(tokens_list)
 
         else:
             wiringpi.digitalWrite(led_pin, GPIO.LOW)
