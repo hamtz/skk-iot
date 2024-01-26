@@ -9,8 +9,14 @@ from firebase_admin import credentials, messaging
 
 cred = credentials.Certificate("siskam-df66d-firebase-adminsdk-q6lbj-561ad6009d.json")
 firebase_admin.initialize_app(cred)
-tokens = "eGvKDO6wRieOXj_TlOF7ub:APA91bHmyDIcaC_UPXV21rjEFSzoq19OY3aB473ebDh8ORxb6gy5dCFCSCh8qqf8YqzhWxSFA2fsv2t2lIlBoLY2ckVQ-ey0CYDhGc9vkssy7NuRHkeEfdxnTSsT4sS6LSv8_NEcmzPY"
+# tokens = ["eGvKDO6wRieOXj_TlOF7ub:APA91bHmyDIcaC_UPXV21rjEFSzoq19OY3aB473ebDh8ORxb6gy5dCFCSCh8qqf8YqzhWxSFA2fsv2t2lIlBoLY2ckVQ-ey0CYDhGc9vkssy7NuRHkeEfdxnTSsT4sS6LSv8_NEcmzPY"]
 
+# Mendapatkan referensi ke database tokens
+tokens_ref = firebase_admin.db.reference("tokens")
+
+# Mendapatkan semua token dari database
+tokens_snapshot = tokens_ref.get()
+tokens_list = [token for token in tokens_snapshot.values()] if tokens_snapshot else []
 
 # Inisialisasi WiringPi
 wiringpi.wiringPiSetup()
@@ -22,6 +28,7 @@ led_pin = 6
 # Setel pin sebagai input
 wiringpi.pinMode(pir_pin, GPIO.INPUT)
 wiringpi.pinMode(led_pin, GPIO.OUTPUT)
+
 
 # # Ganti dengan kunci server Firebase Anda
 # push_service = FCMNotification(api_key="AIzaSyBKoixbI0LyS93C1mQ2ZA_Slz3BEXN9Xqw")
@@ -38,22 +45,18 @@ wiringpi.pinMode(led_pin, GPIO.OUTPUT)
 #     result = push_service.notify_single_device(registration_id=registration_id, message_title=message_title, message_body=message_body)
 #     print(result)
 
-cred = credentials.Certificate("google-services.json")
-firebase_admin.initialize_app(cred)
 
-
-def pushNotif(title, msg, registration_token, dataObject=None):
+def pushNotif():
     message = messaging.MulticastMessage(
+        tokens=tokens_list,
         notification=messaging.Notification(
-            title=title,
-            body=msg
+            title="Peringatan!",
+            body="Gerakan Terdeteksi"
         ),
-        data=dataObject,
-        tokens=registration_token,
     )
-
     response = messaging.send_multicast(message)
-    print("Successfully sent message: ", response)
+    print(f"Successfully sent {response.success_count} messages")
+    print(f"Failed to send {response.failure_count} messages")
 
 
 def capture_image():
@@ -105,7 +108,7 @@ try:
         if (pir_value == 1):
             wiringpi.digitalWrite(led_pin, GPIO.HIGH)
             capture_image()
-            pushNotif("Peringatan", "Gerakan Terdeteksi", tokens)
+            pushNotif()
 
         else:
             wiringpi.digitalWrite(led_pin, GPIO.LOW)
